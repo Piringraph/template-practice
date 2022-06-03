@@ -2,19 +2,19 @@ package main
 
 import (
 	"fmt"
-	"net/http"
 	"html/template"
+	"net/http"
 )
 
-NewsAggPage struct {
+type NewsAggPage struct {
 	Title string
-	News string
+	News  string
 }
 
 func newsAggHandler(w http.ResponseWriter, r *http.Request) {
 	p := NewsAggPage{Title: "Amazing News Aggregator", News: "some news"}
-	t, _ := template.ParseFiles(basictemplating.html)
-	t.execute(w,p)
+	t, _ := template.ParseFiles("basictemplating.html")
+	t.Execute(w, p)
 }
 
 func indexhandler(w http.ResponseWriter, r *http.Request) {
