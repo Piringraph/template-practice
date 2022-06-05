@@ -17,7 +17,7 @@ func newsAggHandler(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, p)
 }
 
-func indexhandler(w http.ResponseWriter, r *http.Request) {
+func indexHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "<h1>Whoa, Go is so neat!</h1>")
 }
 
