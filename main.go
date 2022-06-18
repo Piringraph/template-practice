@@ -28,10 +28,6 @@ type News struct {
 	Locations []string `xml:"url>loc"`
 }
 
-func indexHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "<h1>Whoa, Go is neat!</h1>")
-}
-
 func newsAggHandler(w http.ResponseWriter, r *http.Request) {
 	var s Sitemapindex
 	var n News
@@ -51,8 +47,13 @@ func newsAggHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	p := NewsAggPage{Title: "Amazing News Aggregator", News: news_map}
-	t, _ := template.ParseFiles("basictemplating.html")
-	t.Execute(w, p)
+	t, _ := template.ParseFiles("newsaggtemplate.html")
+	fmt.Println(t.Execute(w, p))
+
+}
+
+func indexHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "<h1>Whoa, Go is neat!</h1>")
 }
 
 func main() {
