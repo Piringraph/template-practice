@@ -1,5 +1,8 @@
-<h1>{{ .Title }}</h1>
+<h1>{{.Title}}</h1>
+
 <table>
+    <col width="35%">
+    <col width="65%">
     <thead>
         <tr>
             <th>Title</th>
@@ -7,11 +10,11 @@
         </tr>
     </thead>
     <tbody>
-        {{ range $key, $value := .News }}
-        <tr>
-            <td><a href="{{ $value.Location }}" target="_blank">{{ $key }}</a>></td>
+		{{ range $key, $value := .News }}
+		 <tr>
+            <td><a href="{{ $value.Location }}" target='_blank'>{{ $key }}</td>
             <td>{{ $value.Keyword }}</td>
         </tr>
-    {{ end }}
+		{{ end }}
     </tbody>
 </table>
