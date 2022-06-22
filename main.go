@@ -26,29 +26,18 @@ func newsAggHandler(w http.ResponseWriter, r *http.Request) {
 	resp, _ := http.Get("https://www.washingtonpost.com/news-world-sitemap.xml")
 	bytes, _ := ioutil.ReadAll(resp.Body)
 	xml.Unmarshal(bytes, &s)
-	news_map := make(map[string]Url)
-
-	for _, Location := range s.Locations {
-		resp, _ := http.Get(Location)
+	for _,  := range s.Url {
+		resp, _ := http.Get("https://www.washingtonpost.com/news-world-sitemap.xml")
 		bytes, _ := ioutil.ReadAll(resp.Body)
 		xml.Unmarshal(bytes, &n)
-
-		for idx := range n.Publications {
-			news_map[n.Titles[idx]] = Url{n.Publications[idx], n.Locations[idx]}
-		}
 	}
 
-	byteValue, _ := ioutil.ReadAll(xmlFile)
-
 	var url Url
-	xml.Unmarshal(byteValue, &url)
+	xml.Unmarshal(bytes, &url)
 
-	p := Url{Name: "Amazing News Aggregator", Url: Date}
+	p := Url{Name: "Amazing News Aggregator", Url: []News{}}
 	t, _ := template.ParseFiles("newsaggtemplate.html")
 	t.Execute(w, p)
-
-	fmt.Println(news_map)
-
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
