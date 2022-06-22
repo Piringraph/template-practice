@@ -8,47 +8,46 @@ import (
 	"net/http"
 )
 
-type NewsMap struct {
-	Keyword  string
-	Location string
-}
-
-type NewsAggPage struct {
-	Title string
-	News  map[string]NewsMap
-}
-
-type Sitemapindex struct {
-	Locations []string `xml:"sitemap>loc"`
+type Url struct {
+	XMLName xml.Name `xml:"url"`
+	Url     []News   `xml:"news:news"`
+	Name    string
 }
 
 type News struct {
-	Titles    []string `xml:"url>news>title"`
-	Keywords  []string `xml:"url>news>keywords"`
-	Locations []string `xml:"url>loc"`
+	XMLName xml.Name `xml:"news:news"`
+	Title   string   `xml:"news:title"`
+	Date    string   `xml:"news:publication_date"`
 }
 
 func newsAggHandler(w http.ResponseWriter, r *http.Request) {
-	var s Sitemapindex
+	var s Url
 	var n News
-	resp, _ := http.Get("https://www.washingtonpost.com/news-sitemap-index.xml")
+	resp, _ := http.Get("https://www.washingtonpost.com/news-world-sitemap.xml")
 	bytes, _ := ioutil.ReadAll(resp.Body)
 	xml.Unmarshal(bytes, &s)
-	news_map := make(map[string]NewsMap)
+	news_map := make(map[string]Url)
 
 	for _, Location := range s.Locations {
 		resp, _ := http.Get(Location)
 		bytes, _ := ioutil.ReadAll(resp.Body)
 		xml.Unmarshal(bytes, &n)
 
-		for idx := range n.Keywords {
-			news_map[n.Titles[idx]] = NewsMap{n.Keywords[idx], n.Locations[idx]}
+		for idx := range n.Publications {
+			news_map[n.Titles[idx]] = Url{n.Publications[idx], n.Locations[idx]}
 		}
 	}
 
-	p := NewsAggPage{Title: "Amazing News Aggregator", News: news_map}
+	byteValue, _ := ioutil.ReadAll(xmlFile)
+
+	var url Url
+	xml.Unmarshal(byteValue, &url)
+
+	p := Url{Name: "Amazing News Aggregator", Url: Date}
 	t, _ := template.ParseFiles("newsaggtemplate.html")
-	fmt.Println(t.Execute(w, p))
+	t.Execute(w, p)
+
+	fmt.Println(news_map)
 
 }
 
